@@ -12,16 +12,23 @@ function buildSlider() {
   const track = document.getElementById("sliderTrack");
   if (!track) return;
 
-  // Place your artwork slider images here:
-  // frontend/assets/slider/art1.jpg ... frontend/assets/slider/art12.jpg
-  // Missing files are skipped, so the logo will not appear as a fallback inside the slider.
-  const images = Array.from(
-    { length: 12 },
-    (_, index) => `../assets/slider/art${index + 1}.jpg`
-  );
+  const images = [
+    "../assets/slider/art1.jpg",
+    "../assets/slider/art2.jpg",
+    "../assets/slider/art3.jpg",
+    "../assets/slider/art4.jpg",
+    "../assets/slider/art5.jpg",
+    "../assets/slider/art6.jpg",
+    "../assets/slider/art8.jpg",
+    "../assets/slider/art9.jpg",
+    "../assets/slider/art12.jpg",
+    "../assets/slider/art15.jpg",
+    "../assets/slider/art18.jpg",
+    "../assets/slider/art19.jpg"
+  ];
 
   track.innerHTML = [...images, ...images]
-    .map(src => `<img src="${src}" alt="Artwork slide" loading="lazy" onerror="this.remove()">`)
+    .map((src) => `<img src="${src}" alt="Artwork slide" loading="lazy" onerror="this.remove()">`)
     .join("");
 }
 
