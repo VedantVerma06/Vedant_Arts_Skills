@@ -1,4 +1,4 @@
-window.API_ORIGIN = "http://localhost:5000";
+window.API_ORIGIN = "https://your-backend-name.onrender.com";
 window.API_BASE_URL = `${window.API_ORIGIN}/api`;
 
 window.getToken = function () {
