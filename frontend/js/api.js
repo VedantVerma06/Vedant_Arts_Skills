@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:5000/api";
+const API_BASE_URL = "https://vedant-arts-skills.onrender.com/api";
 
 function getStoredToken() {
   return localStorage.getItem("token") || "";
