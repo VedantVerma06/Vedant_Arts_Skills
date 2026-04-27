@@ -1,4 +1,4 @@
-window.API_ORIGIN = "https://vedant-arts-skills.onrender.com";
+window.API_ORIGIN = "https://vedant-arts-skills.onrender.com/";
 window.API_BASE_URL = `${window.API_ORIGIN}/api`;
 
 window.getToken = function () {
