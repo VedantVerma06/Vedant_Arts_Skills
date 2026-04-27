@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Profile - VedantArtsSkills</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body onload="init()">
+<header></header>
+<main class="page-shell">
+  <section class="profile-card" style="padding:24px;margin-bottom:24px;display:flex;gap:18px;align-items:center;">
+    <div class="avatar" id="avatar" style="width:70px;height:70px;border-radius:50%;background:rgba(197,160,89,.16);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.4rem;color:var(--accent);">U</div>
+    <div>
+      <h1 id="userName" style="margin:0;">Name</h1>
+      <p class="muted" style="margin:4px 0;"><span id="userEmail"></span> · <span id="userUsername"></span></p>
+      <span class="status-badge" id="userRole">User</span>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title"><h2>Active Orders</h2><p class="muted">Cancel pending orders or upload payment after acceptance.</p></div>
+    <div id="activeOrders" class="grid"></div>
+  </section>
+
+  <section style="margin-top:28px;">
+    <div class="section-title"><h2>Past Orders</h2><p class="muted">Completed, rejected, or cancelled orders.</p></div>
+    <div id="pastOrders" class="grid"></div>
+  </section>
+</main>
+<footer class="footer">© 2026 VedantArtsSkills</footer>
+<script src="../js/common.js"></script>
+<script src="../js/pages/profile.js"></script>
+</body>
+</html>

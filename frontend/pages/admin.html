@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel - VedantArtsSkills</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body onload="init()">
+<header></header>
+<main class="page-shell">
+  <div class="section-title"><div><h1>Admin Dashboard</h1><p class="muted">Manage orders, artworks, content, and contact details.</p></div></div>
+  <div id="adminAccessMessage" class="empty-state" style="display:none;">You are not authorized to access this page.</div>
+
+  <section id="adminContent" style="display:none;">
+    <div class="admin-tabs">
+      <button onclick="showSection('ordersSection')">Orders</button>
+      <button onclick="showSection('addArtworkSection')">Add Artwork</button>
+      <button onclick="showSection('manageArtworksSection')">Manage Artworks</button>
+      <button onclick="showSection('aboutSection')">Update About</button>
+      <button onclick="showSection('funFactsSection')">Fun Facts</button>
+      <button onclick="showSection('contactSection')">Contact Details</button>
+    </div>
+
+    <section id="ordersSection" class="admin-section glass-card">
+      <div class="section-title"><h2>Orders</h2><select id="orderFilter"><option value="all">All Orders</option><option value="pending">Pending</option><option value="accepted">Accepted</option><option value="payment_uploaded">Payment Uploaded</option><option value="in_progress">In Progress</option><option value="completed">Completed</option><option value="rejected">Rejected</option><option value="cancelled">Cancelled</option></select></div>
+      <div id="allOrders" class="grid"></div>
+    </section>
+
+    <section id="addArtworkSection" class="admin-section glass-card" style="display:none;">
+      <h2>Add Artwork</h2>
+      <form id="artworkForm" enctype="multipart/form-data">
+        <label>Title</label><input type="text" id="artTitle" required>
+        <label>Category</label><input type="text" id="artCategory" required>
+        <label>Price</label><input type="number" id="artPrice" required>
+        <label>Caption</label><textarea id="artCaption"></textarea>
+        <label>Artwork Image</label><input type="file" id="artImage" accept="image/*" required>
+        <button type="submit">Add Artwork</button>
+      </form>
+    </section>
+
+    <section id="manageArtworksSection" class="admin-section glass-card" style="display:none;">
+      <h2>Manage Artworks</h2>
+      <div id="artworksList" class="gallery-grid"></div>
+    </section>
+
+    <section id="aboutSection" class="admin-section glass-card" style="display:none;">
+      <h2>Update About</h2>
+      <form id="aboutForm">
+        <label>Artist Name</label><input type="text" id="artistName">
+        <label>About Text</label><textarea id="aboutText"></textarea>
+        <label>About Page Profile Image URL</label><input type="text" id="profileImage">
+        <label>Home About Preview Image URL</label><input type="text" id="aboutPreviewImage">
+        <button type="submit">Save About</button>
+      </form>
+    </section>
+
+    <section id="funFactsSection" class="admin-section glass-card" style="display:none;">
+      <h2>Fun Facts</h2>
+      <form id="funFactsForm">
+        <label>Fun Facts (one per line)</label><textarea id="funFacts"></textarea>
+        <button type="submit">Save Fun Facts</button>
+      </form>
+    </section>
+
+    <section id="contactSection" class="admin-section glass-card" style="display:none;">
+      <h2>Contact Details</h2>
+      <form id="contactForm">
+        <label>WhatsApp</label><input type="text" id="whatsapp">
+        <label>Email</label><input type="text" id="contactEmail">
+        <label>Instagram</label><input type="text" id="instagram">
+        <label>Phone</label><input type="text" id="phone">
+        <button type="submit">Save Contact</button>
+      </form>
+    </section>
+  </section>
+</main>
+<footer class="footer">© 2026 VedantArtsSkills</footer>
+<script src="../js/common.js"></script>
+<script src="../js/pages/admin.js"></script>
+</body>
+</html>

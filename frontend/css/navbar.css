@@ -1,0 +1,105 @@
+.site-header{
+  position:fixed;
+  top:14px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:1000;
+  width:min(calc(100% - 24px), 1280px);
+}
+.navbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  padding:12px 16px;
+  border-radius:999px;
+  background:rgba(10,16,12,.72);
+  border:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  box-shadow:0 16px 40px rgba(0,0,0,.25);
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:0;
+}
+.brand img{
+  width:44px;
+  height:44px;
+  object-fit:cover;
+  border-radius:50%;
+  border:2px solid rgba(0,255,136,.5);
+  box-shadow:0 0 0 5px rgba(0,255,136,.1);
+}
+.brand-meta{
+  min-width:0;
+}
+.brand-meta strong{
+  display:block;
+  font-size:.98rem;
+  white-space:nowrap;
+}
+.brand-meta span{
+  display:block;
+  color:#9caf9f;
+  font-size:.78rem;
+}
+.nav-links{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.nav-links a,.nav-links button{
+  border:none;
+  background:transparent;
+  color:#dfeee5;
+  cursor:pointer;
+  padding:10px 14px;
+  border-radius:999px;
+  transition:background .25s ease, color .25s ease, transform .25s ease;
+}
+.nav-links a:hover,.nav-links button:hover{
+  background:rgba(255,255,255,.05);
+  color:#fff;
+  transform:translateY(-1px);
+}
+.nav-links a.active{
+  background:rgba(0,255,136,.14);
+  color:#aaffcf;
+}
+.nav-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.mobile-toggle{
+  display:none;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  color:#fff;
+  border-radius:14px;
+  padding:10px 12px;
+}
+@media (max-width: 900px){
+  .navbar{
+    border-radius:28px;
+    align-items:flex-start;
+    flex-wrap:wrap;
+  }
+  .mobile-toggle{display:inline-flex}
+  .nav-links{
+    display:none;
+    width:100%;
+    padding-top:6px;
+  }
+  .nav-links.open{
+    display:flex;
+  }
+  .nav-links a,.nav-links button{
+    width:100%;
+    text-align:left;
+  }
+}

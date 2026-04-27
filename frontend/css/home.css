@@ -1,0 +1,22 @@
+.home-page{width:min(1500px,calc(100% - 16px));}
+.hero-slider{position:relative;min-height:430px;overflow:hidden;padding:22px;margin-bottom:28px;display:flex;align-items:center;justify-content:center}
+.slider-track{position:absolute;inset:0;display:flex;gap:20px;align-items:center;width:max-content;animation:scrollSlider 38s linear infinite;opacity:.44}
+.slider-track img{width:250px;height:340px;object-fit:cover;border-radius:28px;filter:saturate(.9) contrast(.96);border:1px solid var(--border)}
+.hero-center{position:relative;z-index:2;text-align:center;padding:28px;border-radius:28px;background:rgba(18,18,18,.50);backdrop-filter:blur(6px)}
+body.light-theme .hero-center{background:rgba(199,173,131,.58)}
+.hero-center img{width:132px;height:132px;border-radius:50%;object-fit:cover;border:3px solid var(--accent);box-shadow:0 0 45px rgba(197,160,89,.28)}
+.hero-center h1{font-size:clamp(2rem,5vw,4rem);margin:14px 0 0}
+.hero-center p{color:var(--muted);margin:8px 0 0}
+.home-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:26px 0}
+.home-card{height:330px;display:flex;flex-direction:column;overflow:hidden;background:linear-gradient(180deg,var(--card),var(--card-2));border:1px solid var(--border);border-radius:24px;cursor:pointer;box-shadow:var(--shadow);transition:.25s}
+.home-card:hover{transform:translateY(-5px);border-color:var(--accent)}
+.home-card img{width:100%;height:210px;object-fit:cover}
+.home-card div{padding:16px}
+.home-card h3{margin:0 0 4px}
+.home-card p{margin:0;color:var(--muted)}
+.facts-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.fact-card{padding:18px;border-radius:20px;background:var(--card);border:1px solid var(--border)}
+.fact-card span{color:var(--accent);font-weight:900}
+.fact-card p{margin:8px 0 0;color:var(--text)}
+@keyframes scrollSlider{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(max-width:850px){.home-page{width:min(100% - 12px,1500px)}.home-cards,.facts-grid{grid-template-columns:1fr}.hero-slider{min-height:330px}.slider-track img{width:170px;height:245px}.home-card{height:auto}.home-card img{height:210px}}

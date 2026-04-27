@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gallery - VedantArtsSkills</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/gallery.css">
+  <link rel="stylesheet" href="../css/modal.css">
+</head>
+<body onload="init()">
+<header></header>
+<main class="page-shell">
+  <div class="section-title">
+    <div><h1>Gallery</h1><p class="muted">Explore artwork posts, likes, and comments.</p></div>
+    <div style="width:min(320px,100%);"><input id="gallerySearch" placeholder="Search artworks..."></div>
+  </div>
+  <div id="galleryGrid" class="gallery-grid"></div>
+</main>
+
+<div id="overlay" class="modal-overlay" style="display:none;">
+  <div class="modal-card">
+    <div class="modal-layout">
+      <div class="modal-image-pane" id="modalImage"></div>
+      <div class="modal-content-pane">
+        <div class="modal-top"><div><h2 id="modalTitle">Artwork</h2><div id="modalActions" class="modal-actions"></div><p id="modalCaption" class="modal-caption"></p></div><button class="close-btn" onclick="closeModal()">×</button></div>
+        <div id="commentsList" class="comments-list"></div>
+        <div class="comment-form">
+          <input id="commentInput" placeholder="Write a comment...">
+          <button onclick="addComment()">Post</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<footer class="footer">© 2026 VedantArtsSkills</footer>
+<script src="../js/common.js"></script>
+<script src="../js/pages/gallery.js?v=captionfix1"></script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Home - VedantArtsSkills</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/home.css">
+</head>
+<body onload="init()">
+<header></header>
+<main class="page-shell home-page">
+  <section class="hero-slider glass-card">
+    <div class="slider-track" id="sliderTrack"></div>
+    <div class="hero-center">
+      <img src="../assets/logo.png" alt="VedantArtsSkills logo">
+      <h1>VedantArtsSkills</h1>
+      <p>Art portfolio, creative commissions, and custom handmade work.</p>
+    </div>
+  </section>
+
+  <section class="home-cards">
+    <article class="home-card" onclick="goToPage('about.html')">
+      <img src="../assets/about.JPG" alt="About" loading="lazy">
+      <div><h3>About</h3><p>Know the artist and creative journey.</p></div>
+    </article>
+    <article class="home-card" onclick="goToPage('gallery.html')">
+      <img src="../assets/gallery.jpg" alt="Gallery" loading="lazy">
+      <div><h3>Gallery</h3><p>Explore artworks, likes, and comments.</p></div>
+    </article>
+    <article class="home-card" onclick="goToPage('contact.html')">
+      <img src="../assets/contact.webp" alt="Contact and order" loading="lazy">
+      <div><h3>Cont./Order</h3><p>Check pricing and place a commission.</p></div>
+    </article>
+  </section>
+
+  <section class="content-section">
+    <div class="section-title"><h2>Fun Facts</h2><p class="muted">Small creative notes from the studio.</p></div>
+    <div id="facts" class="facts-grid"></div>
+  </section>
+</main>
+<footer class="footer">© 2026 VedantArtsSkills</footer>
+<script src="../js/common.js"></script>
+<script src="../js/pages/home.js?v=art-slider-2"></script>
+</body>
+</html>

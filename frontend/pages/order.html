@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Order - VedantArtsSkills</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/form.css">
+</head>
+
+<body onload="init()">
+  <main class="order-page">
+    <section class="form-card order-form-card">
+      <h1>Place Your Artwork Order</h1>
+      <p class="muted">
+        Submit your request with reference images. Payment is only required after admin accepts your order.
+      </p>
+
+      <form id="orderForm" enctype="multipart/form-data" onsubmit="return false;">
+        <label for="username">Username</label>
+        <input id="username" type="text" readonly>
+
+        <label for="email">Email</label>
+        <input id="email" type="email" placeholder="Enter your email">
+
+        <div class="two-col grid">
+          <div>
+            <label for="size">Commission Size</label>
+            <select id="size">
+              <option value="">Select size</option>
+              <option value="A5">A5 (14.8 × 21 cm)</option>
+              <option value="A4">A4 (21 × 29.7 cm)</option>
+              <option value="A3">A3 (29.7 × 42 cm)</option>
+              <option value="A2">A2 (42 × 59.4 cm)</option>
+              <option value="A1">A1 (59.4 × 84.1 cm)</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="medium">Medium</label>
+            <select id="medium">
+              <option value="">Select medium</option>
+              <option value="graphite">Graphite</option>
+              <option value="colour">Colour</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="pricePreview" class="price-preview"></div>
+
+        <label for="image">Reference Image Upload</label>
+        <input id="image" type="file" accept="image/*" multiple>
+
+        <div id="filePreview" class="file-preview-list"></div>
+
+        <label for="description">Description</label>
+        <textarea id="description" placeholder="Add any extra details about the artwork"></textarea>
+
+        <button id="submitBtn" type="button" onclick="submitOrder()" disabled>
+          Submit Order
+        </button>
+      </form>
+    </section>
+  </main>
+
+  <script src="../js/common.js"></script>
+  <script src="../js/pages/order.js?v=20000"></script>
+</body>
+</html>
