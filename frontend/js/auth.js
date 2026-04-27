@@ -1,4 +1,4 @@
-const AUTH_API = "http://localhost:5000/api";
+const AUTH_API = window.API_BASE_URL || "https://vedant-arts-skills.onrender.com/api";
 
 async function login() {
   const email = document.getElementById("loginEmail").value.trim().toLowerCase();
