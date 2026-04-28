@@ -176,16 +176,30 @@ window.fixImageUrl = function (url) {
   let value = String(url).trim();
   if (!value) return "../assets/logo.png";
 
-  if (value.startsWith("../assets/") || value.startsWith("./assets/") || value.startsWith("assets/")) {
+  // Keep local/static assets unchanged.
+  if (
+    value.startsWith("../assets/") ||
+    value.startsWith("./assets/") ||
+    value.startsWith("assets/") ||
+    value.startsWith("data:image/") ||
+    value.startsWith("blob:")
+  ) {
     return value;
   }
 
+  // Cloudinary already returns production HTTPS URLs. Do not modify them.
+  if (value.includes("res.cloudinary.com")) {
+    return value.replace(/^http:\/\//i, "https://");
+  }
+
+  // Fix old URLs already saved in MongoDB from local/backend uploads.
   value = value
     .replace(/^http:\/\/localhost:5000/i, window.API_ORIGIN)
     .replace(/^http:\/\/127\.0\.0\.1:5000/i, window.API_ORIGIN)
     .replace(/^http:\/\/vedant-arts-skills\.onrender\.com/i, window.API_ORIGIN)
     .replace(/^https:\/\/vedant-arts-skills\.onrender\.com/i, window.API_ORIGIN);
 
+  // Handle relative upload paths saved as /uploads/... or uploads/...
   if (value.startsWith("/uploads/")) return `${window.API_ORIGIN}${value}`;
   if (value.startsWith("uploads/")) return `${window.API_ORIGIN}/${value}`;
 

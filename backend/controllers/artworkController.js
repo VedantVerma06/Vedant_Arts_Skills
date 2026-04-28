@@ -1,15 +1,49 @@
 import Artwork from "../models/Artwork.js";
 import Like from "../models/Like.js";
 import Comment from "../models/Comment.js";
+import { uploadImageToCloudinary } from "../utils/cloudinaryUpload.js";
 
-const toFileUrl = (req, file) => {
-  if (!file) return "";
-  return `${req.protocol}://${req.get("host")}/uploads/${file.filename}`;
+const normalizeImageUrl = (url = "") => {
+  return String(url || "")
+    .trim()
+    .replace("http://localhost:5000", "https://vedant-arts-skills.onrender.com")
+    .replace("http://vedant-arts-skills.onrender.com", "https://vedant-arts-skills.onrender.com");
+};
+
+const getArtworkImageUrl = async (req, existingUrl = "") => {
+  if (req.file) {
+    return uploadImageToCloudinary(req.file, "vedant-arts-skills/artworks");
+  }
+
+  if (req.body.imageUrl) {
+    return normalizeImageUrl(req.body.imageUrl);
+  }
+
+  return normalizeImageUrl(existingUrl);
+};
+
+
+const normalizeArtworkForResponse = (artwork) => {
+  if (!artwork) return artwork;
+
+  const data = typeof artwork.toObject === "function" ? artwork.toObject() : { ...artwork };
+  data.imageUrl = normalizeImageUrl(data.imageUrl);
+  return data;
 };
 
 export const createArtwork = async (req, res, next) => {
   try {
-    const { title, category, price, caption, size, medium, instagramLink, isForSale, isAvailable } = req.body;
+    const {
+      title,
+      category,
+      price,
+      caption,
+      size,
+      medium,
+      instagramLink,
+      isForSale,
+      isAvailable,
+    } = req.body;
 
     if (!title?.trim() || !category?.trim()) {
       return res.status(400).json({
@@ -18,7 +52,7 @@ export const createArtwork = async (req, res, next) => {
       });
     }
 
-    const imageUrl = toFileUrl(req, req.file) || req.body.imageUrl;
+    const imageUrl = await getArtworkImageUrl(req);
 
     if (!imageUrl) {
       return res.status(400).json({
@@ -36,7 +70,10 @@ export const createArtwork = async (req, res, next) => {
       medium: medium?.trim() || "",
       instagramLink: instagramLink?.trim() || "",
       isForSale: String(isForSale) === "true" || isForSale === true,
-      isAvailable: isAvailable === undefined ? true : String(isAvailable) === "true" || isAvailable === true,
+      isAvailable:
+        isAvailable === undefined
+          ? true
+          : String(isAvailable) === "true" || isAvailable === true,
       imageUrl,
       createdBy: req.user._id,
     });
@@ -44,7 +81,7 @@ export const createArtwork = async (req, res, next) => {
     res.status(201).json({
       success: true,
       message: "Artwork created successfully",
-      data: artwork,
+      data: normalizeArtworkForResponse(artwork),
     });
   } catch (error) {
     next(error);
@@ -80,10 +117,12 @@ export const getArtworks = async (req, res, next) => {
       .populate("createdBy", "username email")
       .sort({ createdAt: -1 });
 
+    const normalizedArtworks = artworks.map(normalizeArtworkForResponse);
+
     res.status(200).json({
       success: true,
-      count: artworks.length,
-      data: artworks,
+      count: normalizedArtworks.length,
+      data: normalizedArtworks,
     });
   } catch (error) {
     next(error);
@@ -92,7 +131,10 @@ export const getArtworks = async (req, res, next) => {
 
 export const getSingleArtwork = async (req, res, next) => {
   try {
-    const artwork = await Artwork.findById(req.params.id).populate("createdBy", "username email");
+    const artwork = await Artwork.findById(req.params.id).populate(
+      "createdBy",
+      "username email"
+    );
 
     if (!artwork) {
       return res.status(404).json({
@@ -103,7 +145,7 @@ export const getSingleArtwork = async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      data: artwork,
+      data: normalizeArtworkForResponse(artwork),
     });
   } catch (error) {
     next(error);
@@ -121,7 +163,7 @@ export const updateArtwork = async (req, res, next) => {
       });
     }
 
-    const imageUrl = toFileUrl(req, req.file) || req.body.imageUrl;
+    const imageUrl = await getArtworkImageUrl(req, artwork.imageUrl);
 
     artwork.title = req.body.title?.trim() ?? artwork.title;
     artwork.category = req.body.category?.trim().toLowerCase() ?? artwork.category;
@@ -129,9 +171,17 @@ export const updateArtwork = async (req, res, next) => {
     artwork.size = req.body.size?.trim() ?? artwork.size;
     artwork.medium = req.body.medium?.trim() ?? artwork.medium;
     artwork.instagramLink = req.body.instagramLink?.trim() ?? artwork.instagramLink;
-    artwork.price = req.body.price !== undefined ? Number(req.body.price) || 0 : artwork.price;
-    artwork.isForSale = req.body.isForSale !== undefined ? String(req.body.isForSale) === "true" || req.body.isForSale === true : artwork.isForSale;
-    artwork.isAvailable = req.body.isAvailable !== undefined ? String(req.body.isAvailable) === "true" || req.body.isAvailable === true : artwork.isAvailable;
+    artwork.price =
+      req.body.price !== undefined ? Number(req.body.price) || 0 : artwork.price;
+    artwork.isForSale =
+      req.body.isForSale !== undefined
+        ? String(req.body.isForSale) === "true" || req.body.isForSale === true
+        : artwork.isForSale;
+    artwork.isAvailable =
+      req.body.isAvailable !== undefined
+        ? String(req.body.isAvailable) === "true" || req.body.isAvailable === true
+        : artwork.isAvailable;
+
     if (imageUrl) artwork.imageUrl = imageUrl;
 
     await artwork.save();
@@ -139,7 +189,7 @@ export const updateArtwork = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "Artwork updated successfully",
-      data: artwork,
+      data: normalizeArtworkForResponse(artwork),
     });
   } catch (error) {
     next(error);
@@ -240,7 +290,10 @@ export const addComment = async (req, res, next) => {
     artwork.commentsCount += 1;
     await artwork.save();
 
-    const populatedComment = await Comment.findById(comment._id).populate("userId", "username profileImage");
+    const populatedComment = await Comment.findById(comment._id).populate(
+      "userId",
+      "username profileImage"
+    );
 
     res.status(201).json({
       success: true,

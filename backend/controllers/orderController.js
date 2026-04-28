@@ -1,5 +1,6 @@
 import Order from "../models/Order.js";
 import { sendEmail } from "../services/emailService.js";
+import { uploadImageToCloudinary, uploadImagesToCloudinary } from "../utils/cloudinaryUpload.js";
 
 const VALID_SIZES = ["A5", "A4", "A3", "A2", "A1"];
 const VALID_MEDIUMS = ["graphite", "colour"];
@@ -36,12 +37,31 @@ const ALLOWED_ADMIN_TRANSITIONS = {
 
 const getUserId = (req) => req.user?._id || req.user?.id;
 
-const fileToUrl = (req, file) => {
-  return `${req.protocol}://${req.get("host")}/uploads/${file.filename}`;
+const normalizeStatus = (status) => String(status || "").trim();
+
+const formatMedium = (medium) => {
+  if (medium === "graphite") return "Graphite";
+  if (medium === "colour") return "Colour";
+  return medium || "N/A";
 };
 
-const filesToUrls = (req, files = []) => {
-  return files.map((file) => fileToUrl(req, file));
+const normalizeImageUrl = (url = "") => {
+  return String(url || "")
+    .trim()
+    .replace("http://localhost:5000", "https://vedant-arts-skills.onrender.com")
+    .replace("http://vedant-arts-skills.onrender.com", "https://vedant-arts-skills.onrender.com");
+};
+
+const getOrderSummary = (order) => {
+  return `Order Details:
+Order ID: ${order._id}
+Name: ${order.name || "N/A"}
+Email: ${order.email || "N/A"}
+Size: ${order.size || "N/A"}
+Medium: ${formatMedium(order.medium)}
+Total Price: ₹${order.budget || 0}
+Advance Amount: ₹${order.advanceAmount || 0}
+Status: ${STATUS_LABELS[order.status] || order.status}`;
 };
 
 const sendOrderEmail = async (to, subject, text) => {
@@ -76,26 +96,6 @@ const queueEmail = (emailTask) => {
   });
 };
 
-const normalizeStatus = (status) => String(status || "").trim();
-
-const formatMedium = (medium) => {
-  if (medium === "graphite") return "Graphite";
-  if (medium === "colour") return "Colour";
-  return medium || "N/A";
-};
-
-const getOrderSummary = (order) => {
-  return `Order Details:
-Order ID: ${order._id}
-Name: ${order.name || "N/A"}
-Email: ${order.email || "N/A"}
-Size: ${order.size || "N/A"}
-Medium: ${formatMedium(order.medium)}
-Total Price: ₹${order.budget || 0}
-Advance Amount: ₹${order.advanceAmount || 0}
-Status: ${STATUS_LABELS[order.status] || order.status}`;
-};
-
 export const createOrder = async (req, res, next) => {
   try {
     const { description, size, medium, budget, name, email } = req.body;
@@ -125,7 +125,11 @@ export const createOrder = async (req, res, next) => {
       });
     }
 
-    const referenceImages = filesToUrls(req, req.files?.referenceImages || []);
+    const uploadedFiles = req.files?.referenceImages || [];
+    const referenceImages = await uploadImagesToCloudinary(
+      uploadedFiles,
+      "vedant-arts-skills/orders/reference-images"
+    );
 
     if (!referenceImages.length) {
       return res.status(400).json({
@@ -214,10 +218,17 @@ export const getMyOrders = async (req, res, next) => {
 
     const orders = await Order.find({ userId }).sort({ createdAt: -1 });
 
+    const normalizedOrders = orders.map((order) => ({
+      ...order.toObject(),
+      referenceImages: (order.referenceImages || []).map(normalizeImageUrl),
+      paymentScreenshot: normalizeImageUrl(order.paymentScreenshot),
+      progressImages: (order.progressImages || []).map(normalizeImageUrl),
+    }));
+
     return res.status(200).json({
       success: true,
-      count: orders.length,
-      data: orders,
+      count: normalizedOrders.length,
+      data: normalizedOrders,
     });
   } catch (error) {
     next(error);
@@ -248,10 +259,17 @@ export const getAllOrders = async (req, res, next) => {
       .populate("userId", "username email")
       .sort({ createdAt: -1 });
 
+    const normalizedOrders = orders.map((order) => ({
+      ...order.toObject(),
+      referenceImages: (order.referenceImages || []).map(normalizeImageUrl),
+      paymentScreenshot: normalizeImageUrl(order.paymentScreenshot),
+      progressImages: (order.progressImages || []).map(normalizeImageUrl),
+    }));
+
     return res.status(200).json({
       success: true,
-      count: orders.length,
-      data: orders,
+      count: normalizedOrders.length,
+      data: normalizedOrders,
     });
   } catch (error) {
     next(error);
@@ -308,7 +326,10 @@ export const uploadPaymentScreenshot = async (req, res, next) => {
       });
     }
 
-    order.paymentScreenshot = fileToUrl(req, paymentFiles[0]);
+    order.paymentScreenshot = await uploadImageToCloudinary(
+      paymentFiles[0],
+      "vedant-arts-skills/orders/payment-screenshots"
+    );
     order.status = "payment_uploaded";
 
     await order.save();

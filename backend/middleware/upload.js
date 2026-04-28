@@ -1,11 +1,9 @@
 import fs from "fs";
+import os from "os";
 import path from "path";
 import multer from "multer";
-import { fileURLToPath } from "url";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const uploadDir = path.join(__dirname, "..", "uploads");
+const uploadDir = path.join(os.tmpdir(), "vedant-arts-skills-uploads");
 
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
