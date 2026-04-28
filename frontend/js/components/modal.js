@@ -9,7 +9,7 @@ export function createArtworkModal(artwork) {
       <div class="modal-card">
         <div class="modal-layout">
           <div class="modal-image-pane">
-            <img src="${escapeHtml(artwork.imageUrl || "")}" alt="${escapeHtml(artwork.title || "Artwork")}" />
+            <img src="${escapeHtml(window.fixImageUrl(artwork.imageUrl || ""))}" alt="${escapeHtml(artwork.title || "Artwork")}" />
           </div>
           <div class="modal-content-pane">
             <div class="modal-top">

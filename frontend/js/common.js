@@ -170,9 +170,33 @@ window.getBudget = function (size, medium) {
   return prices[medium]?.[size] || 0;
 };
 
+window.fixImageUrl = function (url) {
+  if (!url) return "../assets/logo.png";
+
+  let value = String(url).trim();
+  if (!value) return "../assets/logo.png";
+
+  if (value.startsWith("../assets/") || value.startsWith("./assets/") || value.startsWith("assets/")) {
+    return value;
+  }
+
+  value = value
+    .replace(/^http:\/\/localhost:5000/i, window.API_ORIGIN)
+    .replace(/^http:\/\/127\.0\.0\.1:5000/i, window.API_ORIGIN)
+    .replace(/^http:\/\/vedant-arts-skills\.onrender\.com/i, window.API_ORIGIN)
+    .replace(/^https:\/\/vedant-arts-skills\.onrender\.com/i, window.API_ORIGIN);
+
+  if (value.startsWith("/uploads/")) return `${window.API_ORIGIN}${value}`;
+  if (value.startsWith("uploads/")) return `${window.API_ORIGIN}/${value}`;
+
+  return value;
+};
+
 window.imageFallback = function (img) {
+  if (!img) return;
   img.onerror = null;
   img.src = "../assets/logo.png";
+  img.alt = img.alt || "Image unavailable";
 };
 
 document.addEventListener("DOMContentLoaded", () => {

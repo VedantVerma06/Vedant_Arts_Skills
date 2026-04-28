@@ -39,8 +39,16 @@ function renderOrders() {
 }
 
 function renderOrder(order) {
-  const refs = (order.referenceImages || []).map(img => `<a href="${img}" target="_blank"><img src="${img}" onerror="imageFallback(this)"></a>`).join("");
-  const payment = order.paymentScreenshot ? `<a href="${order.paymentScreenshot}" target="_blank"><img src="${order.paymentScreenshot}" onerror="imageFallback(this)"></a>` : `<span class="muted">No payment uploaded</span>`;
+  const refs = (order.referenceImages || []).map(img => {
+    const fixed = window.fixImageUrl(img);
+    return `<a href="${fixed}" target="_blank"><img src="${fixed}" onerror="imageFallback(this)"></a>`;
+  }).join("");
+  const payment = order.paymentScreenshot
+    ? (() => {
+        const fixed = window.fixImageUrl(order.paymentScreenshot);
+        return `<a href="${fixed}" target="_blank"><img src="${fixed}" onerror="imageFallback(this)"></a>`;
+      })()
+    : `<span class="muted">No payment uploaded</span>`;
   const isFinal = ["completed", "rejected", "cancelled"].includes(order.status);
   return `
     <article class="admin-order-card">
@@ -132,7 +140,7 @@ async function loadArtworks() {
   try {
     const data = await window.apiRequest("/artworks");
     const arts = data.data || [];
-    container.innerHTML = arts.length ? arts.map(a => `<article class="art-card"><div class="art-thumb"><img src="${a.imageUrl}" onerror="imageFallback(this)"></div><div class="art-body"><h3>${a.title || "Untitled"}</h3><p class="muted">${a.category || "Artwork"}</p><p>${window.formatPrice(a.price)}</p><button class="danger-btn" onclick="deleteArt('${a._id}', this)">Delete</button></div></article>`).join("") : `<div class="empty-state">No artworks uploaded yet.</div>`;
+    container.innerHTML = arts.length ? arts.map(a => `<article class="art-card"><div class="art-thumb"><img src="${window.fixImageUrl(a.imageUrl)}" onerror="imageFallback(this)"></div><div class="art-body"><h3>${a.title || "Untitled"}</h3><p class="muted">${a.category || "Artwork"}</p><p>${window.formatPrice(a.price)}</p><button class="danger-btn" onclick="deleteArt('${a._id}', this)">Delete</button></div></article>`).join("") : `<div class="empty-state">No artworks uploaded yet.</div>`;
   } catch(error){ container.innerHTML = `<div class="empty-state">Unable to load artworks.</div>`; }
 }
 function attachArtworkForm() {

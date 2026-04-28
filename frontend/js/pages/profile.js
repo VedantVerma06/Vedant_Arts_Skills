@@ -35,9 +35,15 @@ async function loadMyOrders() {
 
 function renderOrderCard(order) {
   const statusClass = `status-${order.status}`;
-  const refs = (order.referenceImages || []).map(img => `<a href="${img}" target="_blank"><img src="${img}" loading="lazy" onerror="imageFallback(this)"></a>`).join("");
+  const refs = (order.referenceImages || []).map(img => {
+    const fixed = window.fixImageUrl(img);
+    return `<a href="" target="_blank"><img src="" loading="lazy" onerror="imageFallback(this)"></a>`;
+  }).join("");
   const payment = order.paymentScreenshot
-    ? `<a href="${order.paymentScreenshot}" target="_blank"><img src="${order.paymentScreenshot}" loading="lazy" onerror="imageFallback(this)"></a>`
+    ? (() => {
+        const fixed = window.fixImageUrl(order.paymentScreenshot);
+        return `<a href="" target="_blank"><img src="" loading="lazy" onerror="imageFallback(this)"></a>`;
+      })()
     : "";
   return `
     <article class="order-card" style="padding:22px;">

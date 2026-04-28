@@ -102,7 +102,7 @@ window.openComments = async function (artworkId) {
   if (!artwork) return;
 
   window.currentArtworkId = artworkId;
-  document.getElementById("modalImage").innerHTML = `<img src="${artwork.imageUrl}" alt="${artwork.title || "Artwork"}" onerror="imageFallback(this)">`;
+  document.getElementById("modalImage").innerHTML = `<img src="${window.fixImageUrl(artwork.imageUrl)}" alt="${artwork.title || "Artwork"}" onerror="imageFallback(this)">`;
   document.getElementById("modalTitle").textContent = artwork.title || "Artwork";
 
   const caption = document.getElementById("modalCaption");
@@ -180,7 +180,7 @@ function renderGallery(artworks) {
     return `
       <article class="art-card">
         <div class="art-thumb" onclick="openComments('${a._id}')">
-          <img src="${a.imageUrl}" alt="${a.title || "Artwork"}" loading="lazy" onerror="imageFallback(this)">
+          <img src="${window.fixImageUrl(a.imageUrl)}" alt="${a.title || "Artwork"}" loading="lazy" onerror="imageFallback(this)">
         </div>
         <div class="art-body">
           <div class="art-head">
